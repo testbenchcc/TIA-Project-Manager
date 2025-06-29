@@ -4,67 +4,67 @@
         Title="MainWindow" Height="450" Width="800">
 
     <Grid>
-        <!--row 0: main work area-->
+        <!-- 1 - file menu row (always on top) -->
         <Grid.RowDefinitions>
+            <RowDefinition Height="22"/>
+            <!-- 0 file menu -->
             <RowDefinition Height="*"/>
-            <!--fills all free height-->
-            <RowDefinition Height="Auto"/>
-            <!--terminal row-->
+            <!-- 1 main work area -->
         </Grid.RowDefinitions>
 
-        <!--=== MAIN WORK AREA =================================================-->
-        <Grid Grid.Row="0">
+        <!-- ========== FILE MENU ========== -->
+        <Menu Grid.Row="0">
+            <MenuItem Header="_File">
+                <MenuItem Header="_New"/>
+                <MenuItem Header="_Open"/>
+                <Separator/>
+                <MenuItem Header="E_xit" Click="Exit_Click"/>
+            </MenuItem>
+            <MenuItem Header="_Help"/>
+        </Menu>
+
+        <!-- ========== MAIN WORK AREA ========== -->
+        <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.2*"/>
-                <!--20 %-->
-                <ColumnDefinition Width="0.8*"/>
-                <!--80 %-->
+                <ColumnDefinition Width="0.25*"/>
+                <!-- 0 left nav -->
+                <ColumnDefinition Width="0.75*"/>
+                <!-- 1 right content -->
             </Grid.ColumnDefinitions>
 
-            <Frame x:Name="LeftFrame"
-                   Grid.Column="0"
-                   NavigationUIVisibility="Hidden"/>
+            <!-- LEFT NAVIGATION PANEL -->
+            <DockPanel Grid.Column="0" Margin="4">
 
+                <!-- repo selector row -->
+                <Grid DockPanel.Dock="Top" Margin="0 0 0 4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <ComboBox x:Name="RepoSelector"
+                  Grid.Column="0"
+                  Height="24"
+                  Margin="0 0 4 0"
+                  SelectionChanged="RepoSelector_SelectionChanged"/>
+
+                    <Button x:Name="AddProjectButton"
+                Grid.Column="1"
+                Content="Add"
+                Width="60"
+                Click="AddProject_Click"/>
+                </Grid>
+
+                <!-- section list under the selector -->
+                <ListBox x:Name="SectionMenu"
+             DockPanel.Dock="Top"
+             SelectionChanged="SectionMenu_SelectionChanged"/>
+            </DockPanel>
+
+            <!-- RIGHT CONTENT AREA -->
             <Frame x:Name="RightFrame"
                    Grid.Column="1"
                    NavigationUIVisibility="Hidden"/>
         </Grid>
-
-        <!--=== TERMINAL ========================================================-->
-        <!--Expander collapses down to its Header, so only the bottom line shows-->
-        <Expander Grid.Row="1"
-                  x:Name="TerminalExpander"
-                  ExpandDirection="Up"
-                  IsExpanded="True">
-
-            <!--Header holds a toggle button and the most recent line-->
-            <Expander.Header>
-                <DockPanel>
-                    <Button DockPanel.Dock="Right"
-                            Content="{Binding IsExpanded,
-                                              ElementName=TerminalExpander,
-                                              Converter={StaticResource BoolToGlyph}}"
-                            Command="{Binding ToggleTerminalCmd}"/>
-                    <TextBlock Text="{Binding LastTerminalLine}"
-                               VerticalAlignment="Center"
-                               Margin="6,0"/>
-                </DockPanel>
-            </Expander.Header>
-
-            <!--Full terminal when expanded-->
-            <Border BorderBrush="Gray" BorderThickness="1">
-                <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <TextBox x:Name="TerminalBox"
-                             Text="{Binding TerminalText}"
-                             FontFamily="Consolas"
-                             FontSize="12"
-                             IsReadOnly="True"
-                             Background="Black"
-                             Foreground="Lime"
-                             TextWrapping="NoWrap"
-                             AcceptsReturn="True"/>
-                </ScrollViewer>
-            </Border>
-        </Expander>
     </Grid>
 </Window>
