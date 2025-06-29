@@ -22,6 +22,50 @@ The test suite includes the following tests:
 
 6. **GetGitCommitInfo_WithInvalidRepo_ReturnsDefaults**: Tests that the method returns the default values ("Unknown" for hash, timestamp, and message) when given an invalid repository path.
 
+### GetGitTags Tests
+
+7. **GetGitTags_WithValidRepo_ReturnsTags**: Tests that the GetGitTags method returns a valid JSON array of tags when given a valid Git repository path.
+
+8. **GetGitTags_WithLimit_ReturnsLimitedTags**: Tests that the method respects the limit parameter and returns at most the specified number of tags.
+
+9. **GetGitTags_WithInvalidRepo_ReturnsEmptyList**: Tests that the method returns an empty JSON array when given an invalid repository path.
+
+### GetGitTagsDetailed Tests
+
+10. **GetGitTagsDetailed_WithValidRepo_ReturnsTags**: Verifies that the GetGitTagsDetailed method returns valid tag information from a Git repository.
+11. **GetGitTagsDetailed_WithLimit_ReturnsLimitedTags**: Tests that the GetGitTagsDetailed method respects the limit parameter.
+12. **GetGitTagsDetailed_WithInvalidRepo_ReturnsEmptyList**: Confirms that an empty list of tags is returned when an invalid repository path is provided.
+
+### GetGitReleasesDetailed Tests
+
+13. **GetGitReleasesDetailed_WithValidRepo_ReturnsReleases**: Verifies that the GetGitReleasesDetailed method returns valid release information from a Git repository.
+14. **GetGitReleasesDetailed_WithLimit_ReturnsLimitedReleases**: Tests that the GetGitReleasesDetailed method respects the limit parameter.
+15. **GetGitReleasesDetailed_WithInvalidRepo_ReturnsEmptyList**: Confirms that an empty list of releases is returned when an invalid repository path is provided.
+
+### GetGitReleases Tests
+
+16. **GetGitReleases_WithValidRepo_ReturnsReleases**: Tests that the GetGitReleases method returns a valid JSON array of releases when given a valid Git repository path, and verifies that each release follows the expected format.
+
+17. **GetGitReleases_WithLimit_ReturnsLimitedReleases**: Tests that the method respects the limit parameter and returns at most the specified number of releases.
+
+18. **GetGitReleases_WithInvalidRepo_ReturnsEmptyList**: Tests that the method returns an empty JSON array when given an invalid repository path.
+
+### GetGitCommitsDetailed Tests
+
+13. **GetGitCommitsDetailed_WithValidRepo_ReturnsCommits**: Tests that the GetGitCommitsDetailed method returns valid commit data (hash, author, date, title, and body) when given a valid Git repository path.
+
+14. **GetGitCommitsDetailed_WithLimit_ReturnsLimitedCommits**: Tests that the method respects the limit parameter and returns at most the specified number of commits.
+
+15. **GetGitCommitsDetailed_WithInvalidRepo_ReturnsEmptyList**: Tests that the method returns an empty list of commits when given an invalid repository path.
+
+### GetGitTagsDetailed Tests
+
+16. **GetGitTagsDetailed_WithValidRepo_ReturnsTags**: Tests that the GetGitTagsDetailed method returns valid tag data (name, date, hash, message, commitAuthor, tagger, and type) when given a valid Git repository path.
+
+17. **GetGitTagsDetailed_WithLimit_ReturnsLimitedTags**: Tests that the method respects the limit parameter and returns at most the specified number of tags.
+
+18. **GetGitTagsDetailed_WithInvalidRepo_ReturnsEmptyList**: Tests that the method returns an empty list of tags when given an invalid repository path.
+
 ## Running the Tests
 
 ### Using .NET CLI
@@ -72,6 +116,9 @@ The tests use `ITestOutputHelper` to output information during test execution. W
 - The path to the Git repository
 - The build number retrieved (for GetGitBuildNumber tests)
 - Commit hash, timestamp, and message (for GetGitCommitInfo tests)
+- List of tags found (for GetGitTags tests)
+- List of releases found (for GetGitReleases tests)
+- Detailed commit information including hash, author, date, title, and body (for GetGitCommitsDetailed tests)
 - Any branch fallback messages
 
 ## Troubleshooting
