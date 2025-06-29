@@ -43,6 +43,9 @@ on:
     tags:
       - 'v*'
 
+permissions:
+  contents: write
+
 jobs:
 
   build:
@@ -84,7 +87,7 @@ jobs:
 
     # Create a ZIP archive of the published files
     - name: Create ZIP archive
-      run: Compress-Archive -Path ./publish/* -DestinationPath ./TIA-Project-Manager.zip
+      run: Compress-Archive -Path ./publish/* -DestinationPath ./TIA-Project-Manager-windows.zip
 
     # Upload the ZIP archive as an artifact
     # - name: Upload build artifacts
