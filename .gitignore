@@ -1,0 +1,88 @@
+## Build artefacts ###########################################################
+bin/
+obj/
+out/
+# VS “single-file publish” output
+publish/
+
+## User-specific and IDE files ###############################################
+.vs/
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.suo
+*.userprefs
+
+## NuGet #####################################################################
+# Package cache
+packages/
+# Packed nupkg created by dotnet pack
+*.nupkg
+# Auto-generated props / targets
+*.nuget.g.props
+*.nuget.g.targets
+# Global packages folder (if you override default)
+# .nuget/
+
+## Resharper / Rider #########################################################
+.idea/
+*.DotSettings.user
+.ReSharper*/
+
+## Temporary files ###########################################################
+*~
+*.tmp
+*.bak
+*.cache
+*.log
+*.orig
+
+## Debugging and profiling ###################################################
+*.pdb
+*.mdb
+*.svclog
+*.vsp
+*.vspx
+*.coverage
+*.gcov
+*.psess
+*.psess.runconfig
+*.psessdiag
+*.diagsession
+*.ipr
+
+## Visual Studio code analysis ###############################################
+*.ruleset.test
+*.vsmdi
+*_TestResults.xml
+*.cachefile
+*.codeanalysis
+
+## Visual Studio features ####################################################
+# Auto-generated local DBs
+*.mdf
+*.ldf
+# SQLite local DBs
+*.db
+*.sqlite
+# Local function debug secrets
+local.settings.json
+
+## Rider & VS Code launch configs (keep if you share) ########################
+# launch.json
+# tasks.json
+
+## Dotnet tool manifests #####################################################
+# dotnet-tool-store/
+dotnet-tools.json
+
+## Other common ignores ######################################################
+# Secrets and credentials (add your own patterns)
+secrets.json
+appsettings.*.json
+
+# Ignore everything in node_modules except package.json for hybrid projects
+node_modules/*
+!node_modules/**/package.json

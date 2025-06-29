@@ -1,0 +1,70 @@
+﻿<Window x:Name="window" x:Class="Interface.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="450" Width="800">
+
+    <Grid>
+        <!--row 0: main work area-->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <!--fills all free height-->
+            <RowDefinition Height="Auto"/>
+            <!--terminal row-->
+        </Grid.RowDefinitions>
+
+        <!--=== MAIN WORK AREA =================================================-->
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.2*"/>
+                <!--20 %-->
+                <ColumnDefinition Width="0.8*"/>
+                <!--80 %-->
+            </Grid.ColumnDefinitions>
+
+            <Frame x:Name="LeftFrame"
+                   Grid.Column="0"
+                   NavigationUIVisibility="Hidden"/>
+
+            <Frame x:Name="RightFrame"
+                   Grid.Column="1"
+                   NavigationUIVisibility="Hidden"/>
+        </Grid>
+
+        <!--=== TERMINAL ========================================================-->
+        <!--Expander collapses down to its Header, so only the bottom line shows-->
+        <Expander Grid.Row="1"
+                  x:Name="TerminalExpander"
+                  ExpandDirection="Up"
+                  IsExpanded="True">
+
+            <!--Header holds a toggle button and the most recent line-->
+            <Expander.Header>
+                <DockPanel>
+                    <Button DockPanel.Dock="Right"
+                            Content="{Binding IsExpanded,
+                                              ElementName=TerminalExpander,
+                                              Converter={StaticResource BoolToGlyph}}"
+                            Command="{Binding ToggleTerminalCmd}"/>
+                    <TextBlock Text="{Binding LastTerminalLine}"
+                               VerticalAlignment="Center"
+                               Margin="6,0"/>
+                </DockPanel>
+            </Expander.Header>
+
+            <!--Full terminal when expanded-->
+            <Border BorderBrush="Gray" BorderThickness="1">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <TextBox x:Name="TerminalBox"
+                             Text="{Binding TerminalText}"
+                             FontFamily="Consolas"
+                             FontSize="12"
+                             IsReadOnly="True"
+                             Background="Black"
+                             Foreground="Lime"
+                             TextWrapping="NoWrap"
+                             AcceptsReturn="True"/>
+                </ScrollViewer>
+            </Border>
+        </Expander>
+    </Grid>
+</Window>
