@@ -87,8 +87,13 @@ jobs:
       run: Compress-Archive -Path ./publish/* -DestinationPath ./TIA-Project-Manager.zip
 
     # Upload the ZIP archive as an artifact
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v4
+    # - name: Upload build artifacts
+    #   uses: actions/upload-artifact@v4
+    #   with:
+    #     name: TIA-Project-Manager
+    #     path: ./TIA-Project-Manager-windows.zip
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v2
       with:
-        name: TIA-Project-Manager
-        path: ./TIA-Project-Manager.zip
+        files: ./TIA-Project-Manager-windows.zip
