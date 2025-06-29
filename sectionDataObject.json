@@ -1,0 +1,86 @@
+{
+  "repo": [
+    {
+      "name": "",
+      "path": "",
+      "branch": "",
+      "buildNumber": 1,
+      "sections": [
+        {
+          "name": "Dashboard",
+          "icon": "",
+          "commits": {
+            "limit": 10,
+            "items": [
+              {
+                "date": "",
+                "title": "",
+                "body": "",
+                "author": "",
+                "hash": ""
+              }
+            ]
+          },
+          "tags": [
+            {
+              "name": "",
+              "date": "",
+              "hash": "",
+              "message": "",
+              "commitAuthor": "",
+              "tagger": "",
+              "type": ""
+            }
+          ]
+        },
+        {
+          "name": "Project Configuration",
+          "icon": "",
+          "devices": [
+            {
+              "name": "plc_comm",
+              "ip": "33.7.0.1/24"
+            },
+            {
+              "name": "hmi_comm",
+              "ip": "33.7.0.2/24"
+            }
+          ],
+          "dNumber": "",
+          "tNumber": "",
+          "projectName": ""
+        },
+        {
+          "name": "Datablocks",
+          "icon": "",
+          "datablocks": [
+            {
+              "name": "",
+              "db": "",
+              "tags": [
+                {
+                  "name": "",
+                  "type": "",
+                  "location": "",
+                  "comment": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Memory Tags",
+          "icon": "",
+          "tags": [
+            {
+              "name": "",
+              "type": "",
+              "location": "",
+              "comment": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
