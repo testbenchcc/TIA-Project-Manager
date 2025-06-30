@@ -25,10 +25,34 @@ public static class ConfigManager
     /// <summary>Loads existing JSON into a strongly-typed object.</summary>
     public static async Task<RepoConfig> LoadAsync(string filePath)
     {
-        var builder = new ConfigurationBuilder()
-                     .AddJsonFile(filePath, optional: false, reloadOnChange: false);
-        var root = builder.Build();
-        return root.Get<RepoConfig>() ?? new RepoConfig();
+        try
+        {
+            // Read the file content directly
+            string jsonContent = await File.ReadAllTextAsync(filePath);
+            
+            // Use System.Text.Json with custom options to handle potential issues
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+                ReadCommentHandling = JsonCommentHandling.Skip,
+                AllowTrailingCommas = true
+            };
+            
+            var config = JsonSerializer.Deserialize<RepoConfig>(jsonContent, options);
+            return config ?? new RepoConfig();
+        }
+        catch (JsonException ex)
+        {
+            // If there's an issue with the JSON format, create a new config
+            System.Diagnostics.Debug.WriteLine($"Error deserializing config: {ex.Message}");
+            return new RepoConfig();
+        }
+        catch (Exception ex)
+        {
+            // For any other issues, return a new config
+            System.Diagnostics.Debug.WriteLine($"Error loading config: {ex.Message}");
+            return new RepoConfig();
+        }
     }
 
     /// <summary>Saves the object back to disk.</summary>

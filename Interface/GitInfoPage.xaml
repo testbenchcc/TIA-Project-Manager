@@ -52,7 +52,7 @@
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         
-                        <TextBlock Grid.Row="0" Text="Commits for Selected Date" FontWeight="Bold" Margin="5"/>
+                        <TextBlock Grid.Row="0" x:Name="CommitsListHeader" Text="Commits for Selected Date" FontWeight="Bold" Margin="5"/>
                         <ListView Grid.Row="1" x:Name="CommitsList" Margin="5" SelectionChanged="CommitsList_SelectionChanged">
                             <ListView.View>
                                 <GridView>
