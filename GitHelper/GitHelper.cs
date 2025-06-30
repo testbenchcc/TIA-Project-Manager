@@ -354,7 +354,7 @@ public static class GitHelper
     public class GitCommit
     {
         /// <summary>
-        /// The date of the commit in ISO format (YYYY-MM-DD HH:MM:SS).
+        /// The date of the commit in ISO format (dd-MM-yy HH:mm).
         /// </summary>
         [JsonPropertyName("date")]
         public string Date { get; set; } = "";

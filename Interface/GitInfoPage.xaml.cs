@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Controls.Primitives;
 using System.Windows.Shapes;
 using ConfigHelper;
 using Path = System.IO.Path;
@@ -28,6 +29,8 @@ namespace Interface
         // Dashboard section name - Git information appears in this section
         private const string _dashboardSectionName = "Dashboard";
 
+        public DependencyProperty FontWeightProperty { get; private set; }
+
         public GitInfoPage(string repoPath)
         {
             InitializeComponent();
@@ -42,6 +45,10 @@ namespace Interface
             // The default range might be too restrictive
             CommitsCalendar.DisplayDateStart = new DateTime(2000, 1, 1); // Lower bound
             CommitsCalendar.DisplayDateEnd = DateTime.Now.AddYears(10); // Upper bound
+            
+            // Hook the visual-refresh events for calendar highlighting
+            CommitsCalendar.Loaded += (_, __) => MarkCommitDays();
+            CommitsCalendar.DisplayDateChanged += (_, __) => MarkCommitDays();
             
             // Load data asynchronously
             _ = LoadDataAsync();
@@ -276,7 +283,7 @@ namespace Interface
                     {
                         Name = tag.Name,
                         Hash = tag.Hash,
-                        Date = tagDate.ToString("yyyy-MM-dd HH:mm"),
+                        Date = tagDate.ToString("dd-MM-yy"),
                         Message = tag.Message,
                         CommitAuthor = tag.CommitAuthor,
                         Tagger = tag.Tagger,
@@ -384,7 +391,7 @@ namespace Interface
                     {
                         Name = tag.Name,
                         Hash = tag.Hash,
-                        Date = tagDate.ToString("yyyy-MM-dd HH:mm"),
+                        Date = tagDate.ToString("dd-MM-yy"),
                         Message = tag.Message,
                         CommitAuthor = tag.CommitAuthor,
                         Tagger = tag.Tagger,
@@ -435,7 +442,7 @@ namespace Interface
                     {
                         Name = release.Name,
                         Hash = release.Hash,
-                        Date = releaseDate.ToString("yyyy-MM-dd HH:mm"),
+                        Date = releaseDate.ToString("dd-MM-yy"),
                         Message = release.Message,
                         CommitAuthor = release.CommitAuthor,
                         Releaser = release.Releaser,
@@ -551,7 +558,7 @@ namespace Interface
                     {
                         Name = release.Name,
                         Hash = release.Hash,
-                        Date = releaseDate.ToString("yyyy-MM-dd HH:mm"),
+                        Date = releaseDate.ToString("dd-MM-yy"),
                         Message = release.Message,
                         CommitAuthor = release.CommitAuthor,
                         Releaser = release.Releaser,
@@ -567,28 +574,20 @@ namespace Interface
 
         private void HighlightCommitDates()
         {
-            // clear any earlier selection
-            CommitsCalendar.SelectedDate = null;
-            
-            // ---- Do NOT add dates to BlackoutDates here ----
-            // If you still want a visual cue, use a custom
-            // CalendarDayButton style instead of BlackoutDates.
-            
-            // auto-select the most-recent commit date
+            // Set the calendar to show the month of the most recent commit
             if (_commitsByDate.Count > 0)
             {
-                try
-                {
-                    DateTime latest = _commitsByDate.Keys.Max();
-                    CommitsCalendar.SelectedDate = latest;
-                    DisplayCommitsForDate(latest);
-                }
-                catch (Exception ex)
-                {
-                    // Just log the error, don't show a message box to avoid recursion
-                    System.Diagnostics.Debug.WriteLine($"Error setting selected date: {ex.Message}");
-                }
+                // Get the most recent commit date
+                var mostRecentDate = _commitsByDate.Keys.Max();
+                CommitsCalendar.DisplayDate = mostRecentDate;
+                
+                // Select the most recent date to show its commits
+                CommitsCalendar.SelectedDate = mostRecentDate;
+                DisplayCommitsForDate(mostRecentDate);
             }
+            
+            // Apply visual highlighting to dates with commits
+            MarkCommitDays();
         }
 
         private void RefreshButton_Click(object sender, RoutedEventArgs e)
@@ -671,6 +670,43 @@ namespace Interface
                                       $"Commit Author: {selectedRelease.CommitAuthor}\n" +
                                       $"Releaser: {selectedRelease.Releaser}\n" +
                                       $"Type: {selectedRelease.Type}";
+            }
+        }
+        
+        /// <summary>Paints every CalendarDayButton that has commits.</summary>
+        private void MarkCommitDays()
+        {
+            if (CommitsCalendar.Template.FindName("PART_CalendarItem", CommitsCalendar) 
+                is not CalendarItem calItem) return;
+
+            calItem.ApplyTemplate();   // ensures the buttons exist
+
+            foreach (CalendarDayButton btn in FindDayButtons(calItem))
+            {
+                if (btn.DataContext is DateTime d &&
+                    _commitsByDate.ContainsKey(d.Date))
+                {
+                    btn.Background = System.Windows.Media.Brushes.DodgerBlue;
+                    btn.Foreground = System.Windows.Media.Brushes.White;
+                    btn.FontWeight = FontWeights.Bold;
+                }
+                else   // reset normal days
+                {
+                    btn.ClearValue(BackgroundProperty);
+                    btn.ClearValue(ForegroundProperty);
+                    //btn.ClearValue(FontWeightProperty);
+                }
+            }
+        }
+
+        /// <summary>Depth-first search for CalendarDayButton children.</summary>
+        private static IEnumerable<CalendarDayButton> FindDayButtons(DependencyObject root)
+        {
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(root); i++)
+            {
+                DependencyObject child = VisualTreeHelper.GetChild(root, i);
+                if (child is CalendarDayButton btn) yield return btn;
+                foreach (var sub in FindDayButtons(child)) yield return sub;
             }
         }
     }

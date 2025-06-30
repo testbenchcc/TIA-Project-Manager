@@ -184,7 +184,7 @@ if (dashboardSection != null)
     // Add a new commit
     dashboardSection.Commits.Items.Add(new CommitItem
     {
-        Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+        Date = DateTime.Now.ToString("dd-MM-yy HH:mm"),
         Title = "New feature added",
         Body = "Added new functionality to the application",
         Author = "John Doe",

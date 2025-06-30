@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Interface"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="768" d:DesignWidth="1024"
       Title="Git Repository Information">
 
     <Grid>
@@ -35,34 +35,63 @@
             <!-- Left side - Calendar view for commits -->
             <Grid Grid.Column="0" Margin="0,0,5,0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>  <!-- calendar caption -->
+                    <RowDefinition Height="*"/>    <!-- calendar frame  -->
+                    <RowDefinition Height="Auto"/> <!-- commit caption  -->
+                    <RowDefinition Height="*"/>    <!-- commit list     -->
                 </Grid.RowDefinitions>
-                
-                <TextBlock Grid.Row="0" Text="Commits Calendar" FontWeight="Bold" Margin="0,0,0,5"/>
-                <Border Grid.Row="1" BorderBrush="#DDDDDD" BorderThickness="1">
-                    <Calendar x:Name="CommitsCalendar" SelectionMode="SingleDate" SelectedDatesChanged="CommitsCalendar_SelectedDatesChanged"/>
+
+                <!-- 1️⃣ calendar caption -->
+                <TextBlock Grid.Row="0"
+                        Text="Commits Calendar"
+                        FontWeight="Bold"
+                        Margin="0,0,0,5"/>
+
+                <!-- 2️⃣ calendar frame (unchanged) -->
+                <Border Grid.Row="1"
+                        x:Name="CalendarFrame"
+                        VerticalAlignment="Stretch"
+                        HorizontalAlignment="Center"
+                        BorderBrush="#DDDDDD"
+                        BorderThickness="1"
+                        ClipToBounds="True"
+                        Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}">
+                    <Viewbox Stretch="Uniform">
+                        <Calendar x:Name="CommitsCalendar"
+                                SelectionMode="SingleDate"
+                                SelectedDatesChanged="CommitsCalendar_SelectedDatesChanged"/>
+                    </Viewbox>
                 </Border>
 
-                <!-- Commit details for selected date -->
-                <Border Grid.Row="1" Margin="0,220,0,0" BorderBrush="#DDDDDD" BorderThickness="1" Background="#F9F9F9">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        
-                        <TextBlock Grid.Row="0" x:Name="CommitsListHeader" Text="Commits for Selected Date" FontWeight="Bold" Margin="5"/>
-                        <ListView Grid.Row="1" x:Name="CommitsList" Margin="5" SelectionChanged="CommitsList_SelectionChanged">
-                            <ListView.View>
-                                <GridView>
-                                    <GridViewColumn Header="Time" DisplayMemberBinding="{Binding Time}" Width="80"/>
-                                    <GridViewColumn Header="Author" DisplayMemberBinding="{Binding Author}" Width="100"/>
-                                    <GridViewColumn Header="Message" DisplayMemberBinding="{Binding Title}" Width="280"/>
-                                </GridView>
-                            </ListView.View>
-                        </ListView>
-                    </Grid>
+                <!-- 3️⃣ commit caption (new row) -->
+                <TextBlock Grid.Row="2"
+                        x:Name="CommitsListHeader"
+                        Text="Commits for Selected Date"
+                        FontWeight="Bold"
+                        Margin="0,5,0,2"/>
+
+                <!-- 4️⃣ commit list (new row, no hacky margin) -->
+                <Border Grid.Row="3"
+                        BorderBrush="#DDDDDD"
+                        BorderThickness="1"
+                        Background="#F9F9F9">
+                    <ListView x:Name="CommitsList"
+                            Margin="5"
+                            SelectionChanged="CommitsList_SelectionChanged">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Time"
+                                                DisplayMemberBinding="{Binding Time}"
+                                                Width="80"/>
+                                <GridViewColumn Header="Author"
+                                                DisplayMemberBinding="{Binding Author}"
+                                                Width="100"/>
+                                <GridViewColumn Header="Message"
+                                                DisplayMemberBinding="{Binding Title}"
+                                                Width="280"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
                 </Border>
             </Grid>
 
@@ -85,8 +114,8 @@
                     <ListView Grid.Row="1" x:Name="TagsList" Margin="0,0,0,5" SelectionChanged="TagsList_SelectionChanged">
                         <ListView.View>
                             <GridView>
-                                <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="100"/>
-                                <GridViewColumn Header="Date" DisplayMemberBinding="{Binding Date}" Width="140"/>
+                                <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="170"/>
+                                <GridViewColumn Header="Date" DisplayMemberBinding="{Binding Date}" Width="70"/>
                             </GridView>
                         </ListView.View>
                     </ListView>
@@ -103,8 +132,8 @@
                     <ListView Grid.Row="1" x:Name="ReleasesList" Margin="0,0,0,5" SelectionChanged="ReleasesList_SelectionChanged">
                         <ListView.View>
                             <GridView>
-                                <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="100"/>
-                                <GridViewColumn Header="Date" DisplayMemberBinding="{Binding Date}" Width="140"/>
+                                <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="170"/>
+                                <GridViewColumn Header="Date" DisplayMemberBinding="{Binding Date}" Width="70"/>
                             </GridView>
                         </ListView.View>
                     </ListView>
@@ -118,7 +147,7 @@
                     </Grid.RowDefinitions>
                     
                     <TextBlock Grid.Row="0" x:Name="DetailsHeader" Text="Details" FontWeight="Bold" Margin="0,0,0,5"/>
-                    <TextBox Grid.Row="1" x:Name="DetailsTextBox" TextWrapping="Wrap" IsReadOnly="True" VerticalScrollBarVisibility="Auto"/>
+                    <TextBox Grid.Row="1" x:Name="DetailsTextBox" TextWrapping="NoWrap" IsReadOnly="True" VerticalScrollBarVisibility="Auto"/>
                 </Grid>
             </Grid>
         </Grid>
