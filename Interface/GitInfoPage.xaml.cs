@@ -567,47 +567,27 @@ namespace Interface
 
         private void HighlightCommitDates()
         {
-            // Clear any previous selections
+            // clear any earlier selection
             CommitsCalendar.SelectedDate = null;
             
-            // BlackoutDates are used to highlight dates with commits
-            CommitsCalendar.BlackoutDates.Clear();
+            // ---- Do NOT add dates to BlackoutDates here ----
+            // If you still want a visual cue, use a custom
+            // CalendarDayButton style instead of BlackoutDates.
             
-            foreach (var date in _commitsByDate.Keys)
+            // auto-select the most-recent commit date
+            if (_commitsByDate.Count > 0)
             {
-                // In WPF Calendar, we use BlackoutDates for visual highlight 
-                // but then handle it in the SelectedDatesChanged event
-                var range = new CalendarDateRange(date);
-                CommitsCalendar.BlackoutDates.Add(range);
-            }
-            
-            // Automatically select most recent date with commits
-            try
-            {
-                if (_commitsByDate.Count > 0)
+                try
                 {
-                    DateTime mostRecentDate = _commitsByDate.Keys.Max();
-                    
-                    // Make sure the date is valid for the calendar control
-                    if (mostRecentDate >= CommitsCalendar.DisplayDateStart && 
-                        mostRecentDate <= CommitsCalendar.DisplayDateEnd)
-                    {
-                        CommitsCalendar.SelectedDate = mostRecentDate;
-                        
-                        // Display commits for this date
-                        DisplayCommitsForDate(mostRecentDate);
-                    }
-                    else
-                    {
-                        // Just display the commits without selecting a date
-                        DisplayCommitsForDate(mostRecentDate);
-                    }
+                    DateTime latest = _commitsByDate.Keys.Max();
+                    CommitsCalendar.SelectedDate = latest;
+                    DisplayCommitsForDate(latest);
                 }
-            }
-            catch (Exception ex)
-            {
-                // Just log the error, don't show a message box to avoid recursion
-                System.Diagnostics.Debug.WriteLine($"Error setting selected date: {ex.Message}");
+                catch (Exception ex)
+                {
+                    // Just log the error, don't show a message box to avoid recursion
+                    System.Diagnostics.Debug.WriteLine($"Error setting selected date: {ex.Message}");
+                }
             }
         }
 
