@@ -15,6 +15,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WinForms = System.Windows.Forms; // For FolderBrowserDialog with alias
 using ConfigHelper; // Add reference to our ConfigHelper library
+using GitHelper; // Add reference to our GitHelper library
+using Path = System.IO.Path; // Explicitly use System.IO.Path to avoid ambiguity
 
 namespace Interface
 {
@@ -120,21 +122,26 @@ namespace Interface
                 {
                     // User selected a folder
                     string selectedPath = dialog.SelectedPath;
+                    string projectName = System.IO.Path.GetFileName(selectedPath);
                     
                     // Create a new repository entry
                     var newRepo = new Repo
                     {
-                        Name = System.IO.Path.GetFileName(selectedPath),
+                        Name = projectName,
                         Path = selectedPath,
-                        Branch = "main", // Default branch
-                        BuildNumber = 1,
                         Sections = new List<ConfigHelper.Section>
                         {
                             new ConfigHelper.Section { 
                                 Name = "Dashboard", 
-                                Icon = "", 
-                                Commits = new Commits { Limit = 10, Items = new List<CommitItem>() }, 
-                                Tags = new List<Tag>() 
+                                Icon = "" 
+                            },
+                            new ConfigHelper.Section { 
+                                Name = "Overview", 
+                                Icon = "" 
+                            },
+                            new ConfigHelper.Section { 
+                                Name = "Git Information", 
+                                Icon = "" 
                             },
                             new ConfigHelper.Section { 
                                 Name = "Project Configuration", 
@@ -186,14 +193,34 @@ namespace Interface
         // ── Left-panel: section menu listbox ──────────────
         private void SectionMenu_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (SectionMenu.SelectedItem == null)
+            if (SectionMenu.SelectedItem == null || _config?.Repo == null)
                 return;
                 
             // Get the selected section name
             string sectionName = SectionMenu.SelectedItem.ToString();
             
-            // TODO: navigate RightFrame to the page for the chosen section
-            // This will be implemented in a future update
+            // Get the selected repository path
+            string repoName = RepoSelector.SelectedItem.ToString();
+            var selectedRepo = _config.Repo.FirstOrDefault(r => r.Name == repoName);
+            if (selectedRepo == null)
+                return;
+            
+            string repoPath = selectedRepo.Path;
+                
+            // Navigate based on the selected section
+            switch (sectionName)
+            {
+                case "Git Information":
+                case "Dashboard":
+                    // Load the Git info page
+                    RightFrame.Navigate(new GitInfoPage(repoPath));
+                    break;
+                // Add other cases for other sections as needed
+                default:
+                    // For now, clear the frame for other sections
+                    RightFrame.Content = null;
+                    break;
+            }
         }
 
         private void RepoSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)

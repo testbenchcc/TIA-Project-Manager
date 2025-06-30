@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ConfigHelper\ConfigHelper.csproj" />
+    <ProjectReference Include="..\GitHelper\GitHelper.csproj" />
   </ItemGroup>
 
 </Project>

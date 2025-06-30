@@ -1,0 +1,126 @@
+<Page x:Class="Interface.GitInfoPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Interface"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="Git Repository Information">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header/Controls -->
+        <Grid Grid.Row="0" Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            
+            <TextBlock Grid.Column="0" Text="Git Repository Information" FontSize="20" FontWeight="Bold"/>
+            <Button Grid.Column="1" x:Name="RefreshButton" Content="Refresh" Width="80" Click="RefreshButton_Click"/>
+        </Grid>
+
+        <!-- Main Content -->
+        <Grid Grid.Row="1" Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Left side - Calendar view for commits -->
+            <Grid Grid.Column="0" Margin="0,0,5,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                
+                <TextBlock Grid.Row="0" Text="Commits Calendar" FontWeight="Bold" Margin="0,0,0,5"/>
+                <Border Grid.Row="1" BorderBrush="#DDDDDD" BorderThickness="1">
+                    <Calendar x:Name="CommitsCalendar" SelectionMode="SingleDate" SelectedDatesChanged="CommitsCalendar_SelectedDatesChanged"/>
+                </Border>
+
+                <!-- Commit details for selected date -->
+                <Border Grid.Row="1" Margin="0,220,0,0" BorderBrush="#DDDDDD" BorderThickness="1" Background="#F9F9F9">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        
+                        <TextBlock Grid.Row="0" Text="Commits for Selected Date" FontWeight="Bold" Margin="5"/>
+                        <ListView Grid.Row="1" x:Name="CommitsList" Margin="5" SelectionChanged="CommitsList_SelectionChanged">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Time" DisplayMemberBinding="{Binding Time}" Width="80"/>
+                                    <GridViewColumn Header="Author" DisplayMemberBinding="{Binding Author}" Width="100"/>
+                                    <GridViewColumn Header="Message" DisplayMemberBinding="{Binding Title}" Width="280"/>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <!-- Right side - Tags and Releases -->
+            <Grid Grid.Column="1" Margin="5,0,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Tags Section -->
+                <Grid Grid.Row="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    
+                    <TextBlock Grid.Row="0" Text="Git Tags" FontWeight="Bold" Margin="0,0,0,5"/>
+                    <ListView Grid.Row="1" x:Name="TagsList" Margin="0,0,0,5" SelectionChanged="TagsList_SelectionChanged">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="100"/>
+                                <GridViewColumn Header="Date" DisplayMemberBinding="{Binding Date}" Width="140"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Grid>
+                
+                <!-- Releases Section -->
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    
+                    <TextBlock Grid.Row="0" Text="Git Releases" FontWeight="Bold" Margin="0,0,0,5"/>
+                    <ListView Grid.Row="1" x:Name="ReleasesList" Margin="0,0,0,5" SelectionChanged="ReleasesList_SelectionChanged">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="100"/>
+                                <GridViewColumn Header="Date" DisplayMemberBinding="{Binding Date}" Width="140"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Grid>
+
+                <!-- Details Section -->
+                <Grid Grid.Row="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    
+                    <TextBlock Grid.Row="0" x:Name="DetailsHeader" Text="Details" FontWeight="Bold" Margin="0,0,0,5"/>
+                    <TextBox Grid.Row="1" x:Name="DetailsTextBox" TextWrapping="Wrap" IsReadOnly="True" VerticalScrollBarVisibility="Auto"/>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+</Page>
